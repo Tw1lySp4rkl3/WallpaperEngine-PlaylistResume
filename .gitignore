@@ -1,0 +1,43 @@
+# Development dependencies and build intermediates
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.zig-cache/
+zig-out/
+Sources/build*/
+*.o
+*.obj
+*.so
+*.pdb
+
+# Locally supplied manufacturer originals / reconstructed runtime outputs
+upload/
+originals/
+analysis/
+wallpaper32.exe
+wallpaper64.exe
+scripts.js
+vendor.js
+PlaylistResume32.dll
+PlaylistResume64.dll
+PiPlaylistResume32.dll
+PiPlaylistResume64.dll
+
+# Private installation state and backups
+config*.json
+playliststate*.bin
+playlist-resume-backup/
+playlist-resume.bin
+playlist-resume.log
+playlist-resume-install.json
+pi-playlist-resume-*.bin
+pi-playlist-resume-*.log
+*.tmp
+*.log
+
+# Keep the public package and the synthetic state-format fixture
+!PlaylistResumeSetup.exe
+!downloads/PlaylistResume_v1.0.zip
+!Sources/tests/cache-format-fixture.bin

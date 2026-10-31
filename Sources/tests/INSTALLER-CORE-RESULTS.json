@@ -1,0 +1,7 @@
+{
+  "tests": 20,
+  "failures": 0,
+  "errors": 0,
+  "passed": true,
+  "scope": "Actual portable C core and embedded recipes with substituted filesystem/process APIs; Windows GUI is separate."
+}

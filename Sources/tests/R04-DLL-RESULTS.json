@@ -1,0 +1,50 @@
+{
+  "64": {
+    "status": "passed",
+    "actual_windows_dll_executed": true,
+    "checks": [
+      "export ABI",
+      "DllMain",
+      "kernel32 argument ABI",
+      "UTF-16 paths",
+      "native binary cache",
+      "CRC32",
+      "flush then rename",
+      "profile recreation",
+      "DLL-memory restart",
+      "ASLR",
+      "intro checkpoint preservation",
+      "failed rename cleanup and retry",
+      "explicit manual selection",
+      "manual WP1 during prelude",
+      "renderer mismatch preserves checkpoint",
+      "separate monitor checkpoints",
+      "legacy state migration"
+    ],
+    "limit": "KERNEL32 and PE loading are test substitutes. This is not a Windows OS run."
+  },
+  "32": {
+    "status": "passed",
+    "actual_windows_dll_executed": true,
+    "checks": [
+      "export ABI",
+      "DllMain",
+      "kernel32 argument ABI",
+      "UTF-16 paths",
+      "native binary cache",
+      "CRC32",
+      "flush then rename",
+      "profile recreation",
+      "DLL-memory restart",
+      "ASLR",
+      "intro checkpoint preservation",
+      "failed rename cleanup and retry",
+      "explicit manual selection",
+      "manual WP1 during prelude",
+      "renderer mismatch preserves checkpoint",
+      "separate monitor checkpoints",
+      "legacy state migration"
+    ],
+    "limit": "KERNEL32 and PE loading are test substitutes. This is not a Windows OS run."
+  }
+}

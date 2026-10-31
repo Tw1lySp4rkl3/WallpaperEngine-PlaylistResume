@@ -1,0 +1,90 @@
+[
+  {
+    "settings": {
+      "mode": "timer",
+      "order": "sorted",
+      "beginfirst": true,
+      "rememberposition": true,
+      "resumeposition": 1
+    },
+    "name": "Test playlist",
+    "items": [
+      "WP_00001",
+      "WP_00002",
+      "WP_00003",
+      "WP_00004",
+      "WP_00005",
+      "WP_00006",
+      "WP_00007",
+      "WP_00008",
+      "WP_00009",
+      "WP_00010"
+    ]
+  },
+  {
+    "settings": {
+      "mode": "timer",
+      "order": "sorted",
+      "beginfirst": true,
+      "rememberposition": true,
+      "resumeposition": 2
+    },
+    "name": "Test playlist",
+    "items": [
+      "WP_00001",
+      "WP_00002",
+      "WP_00003",
+      "WP_00004",
+      "WP_00005",
+      "WP_00006",
+      "WP_00007",
+      "WP_00008",
+      "WP_00009",
+      "WP_00010"
+    ]
+  },
+  {
+    "settings": {
+      "mode": "timer",
+      "order": "sorted",
+      "beginfirst": true,
+      "rememberposition": true,
+      "resumeposition": 7
+    },
+    "name": "Test playlist",
+    "items": [
+      "WP_00001",
+      "WP_00002",
+      "WP_00003",
+      "WP_00004",
+      "WP_00005",
+      "WP_00006",
+      "WP_00007",
+      "WP_00008",
+      "WP_00009",
+      "WP_00010"
+    ]
+  },
+  {
+    "settings": {
+      "mode": "timer",
+      "order": "sorted",
+      "beginfirst": true,
+      "rememberposition": true,
+      "resumeposition": 10
+    },
+    "name": "Test playlist",
+    "items": [
+      "WP_00001",
+      "WP_00002",
+      "WP_00003",
+      "WP_00004",
+      "WP_00005",
+      "WP_00006",
+      "WP_00007",
+      "WP_00008",
+      "WP_00009",
+      "WP_00010"
+    ]
+  }
+]

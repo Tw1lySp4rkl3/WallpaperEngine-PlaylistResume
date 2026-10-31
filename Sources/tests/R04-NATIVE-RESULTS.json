@@ -1,0 +1,16 @@
+{
+  "64": {
+    "status": "passed",
+    "scenarios": 39,
+    "monitor_fixtures": 3,
+    "fixture_source": "uploaded snapshots",
+    "scope": "Actual EXE hooks/native selection in Unicorn + shared C core compiled for host; simulated renderer/ownership and file/lock platform. Windows loader and WinAPI I/O not run."
+  },
+  "32": {
+    "status": "passed",
+    "scenarios": 39,
+    "monitor_fixtures": 3,
+    "fixture_source": "uploaded snapshots",
+    "scope": "Actual EXE hooks/native selection in Unicorn + shared C core compiled for host; simulated renderer/ownership and file/lock platform. Windows loader and WinAPI I/O not run."
+  }
+}

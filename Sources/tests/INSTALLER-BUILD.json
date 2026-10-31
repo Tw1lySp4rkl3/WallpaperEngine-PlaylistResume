@@ -1,0 +1,22 @@
+{
+  "filename": "PlaylistResumeSetup.exe",
+  "project_version": "1.0",
+  "architecture": "x86 (also runs on x64 Windows)",
+  "installer_languages": [
+    "de",
+    "en"
+  ],
+  "default_language": "German for German Windows display languages, otherwise English",
+  "size": 139264,
+  "sha256": "14d1b75e7b93bfe86a80e9662e4c014e847a2c405ac11d789305dbf46a0e8d19",
+  "subsystem": "Windows GUI",
+  "imports": [
+    "KERNEL32.dll",
+    "USER32.dll",
+    "GDI32.dll",
+    "SHELL32.dll",
+    "ole32.dll",
+    "ADVAPI32.dll"
+  ],
+  "runtime_payload": "Byte-identical to the Windows-confirmed R04 files; versioned installation receipt added."
+}
