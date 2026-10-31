@@ -1,0 +1,135 @@
+PlaylistResume Noncommercial License 1.0
+
+Copyright (c) 2026 Tw1lySp4rkl3 and the respective contributing authors.
+All rights reserved except as expressly granted below.
+
+This is a custom source-available software license. It is not an
+OSI-approved open-source license. The English text of this file governs.
+
+1. Scope and definitions
+
+"Software" means the PlaylistResume source code, project-authored patch logic,
+installer, runtime libraries, documentation, and other material to which the
+copyright holders apply this license, including permitted modifications.
+"Maintainer" means Tw1lySp4rkl3 or a successor explicitly designated by that
+account for the official WallpaperEngine-PlaylistResume project.
+"Official Project" means the project maintained at:
+https://github.com/Tw1lySp4rkl3/WallpaperEngine-PlaylistResume
+
+These terms grant only rights that the relevant copyright holders are entitled
+to grant. Separately identified third-party material remains subject to its own
+terms. No rights in Wallpaper Engine or its manufacturer's software, names,
+trademarks, or other intellectual property are granted by this license.
+
+2. Permitted personal, noncommercial use
+
+Subject to these terms, you may download, install, run, and make reasonable
+backup copies of the Software for your own personal, noncommercial purposes.
+You may inspect the source code and make or test modifications for your own
+personal, noncommercial use or to propose a contribution to the Official Project.
+
+No fee is owed for these permissions. They do not grant rights for commercial
+purposes, redistribution, or sublicensing beyond the express permissions below.
+
+3. Commercial restrictions
+
+Without a separate written agreement with the relevant rights holders, you may
+not commercially exploit the Software or modifications containing its code.
+In particular, you may not:
+
+(a) sell, rent, sublicense for payment, or charge for access to the Software;
+(b) distribute it as part of a paid product, paid download, paid software bundle,
+    or service in which access to the Software or its functionality is charged;
+(c) incorporate its code or runtime libraries into a commercial product or
+    commercially provided service; or
+(d) monetize a redistribution of the Software, including through paywalls,
+    advertising attached to a download, or payments required to obtain it.
+
+This restriction applies to the Software and its exploitation; it is not a
+claim over unrelated earnings or activities. No permission to commercially
+exploit the Software is implied by its being downloadable without charge.
+
+4. Distribution and independent releases
+
+You are not granted a general right to redistribute the Software, publish
+standalone installers or modified releases, or sublicense its code. Such use
+requires prior written permission from the relevant rights holders.
+Linking to the Official Project or its official downloads is permitted.
+
+Section 5 preserves GitHub-related rights. This section does not restrict any
+permission you independently receive under GitHub's Terms of Service or any
+right or exception that applicable law grants independently of this license.
+
+5. GitHub forks and contributions
+
+Nothing in this license limits rights independently granted under GitHub's
+Terms of Service for public repositories, including viewing and forking the
+repository within GitHub. You may use GitHub forks and branches for the
+noncommercial contribution workflow and submit proposed changes to the
+Official Project through pull requests.
+
+The Maintainer decides whether to accept a contribution and what to include
+in the official releases. This license does not grant direct write access,
+maintainer status, or authority to publish on behalf of the Official Project.
+
+6. Permission for intentionally submitted contributions
+
+By intentionally submitting your own contribution for inclusion in the Official
+Project, you grant the Maintainer and its designated successors a worldwide,
+nonexclusive, royalty-free, perpetual license to use, reproduce, modify,
+combine, build, and distribute that contribution as part of the Official Project
+under this license, and to grant the permissions described in this license to
+its recipients. To the extent allowed by law, this grant is irrevocable for
+already submitted contributions. No payment is owed for the contribution.
+
+You retain rights in your own contribution. You represent that you have the
+necessary rights to submit it and disclose applicable third-party terms.
+Your submission does not grant permission for commercial relicensing of your
+contribution; that requires a separate agreement with the relevant rights
+holders. Merely reporting a bug or discussing a feature does not assign rights
+in unrelated material.
+
+7. Notices and representation
+
+Keep this license and applicable copyright and third-party notices with copies
+permitted under these terms. Clearly identify modifications you distribute
+under a separate permission. Do not present an unofficial modification as an
+official release or imply endorsement by the Maintainer or Wallpaper Engine.
+No trademark rights are granted.
+
+8. Rights reserved
+
+All rights not expressly granted remain reserved. You may request a separate
+permission from the Maintainer through the Official Project, but no additional
+permission exists unless the relevant rights holders expressly grant it.
+Your independent rights in material you created are not restricted by this
+license merely because you also contributed it to this project.
+
+9. Breach and termination
+
+The permissions in this license terminate if you materially violate its terms.
+If the rights holders notify you of a violation, they may expressly allow
+reinstatement after it has been remedied. On termination, stop exercising the
+permissions granted here. Independent rights preserved by section 5 and
+applicable law remain unaffected. Termination does not revoke the contribution
+grant for contributions already submitted under section 6.
+
+10. No warranty and limitation of liability
+
+To the maximum extent permitted by applicable law, the Software is provided
+"AS IS", without express or implied warranties, including warranties of
+merchantability, fitness for a particular purpose, and noninfringement.
+To the maximum extent permitted by applicable law, the copyright holders and
+contributors are not liable for damages arising from use of the Software.
+Nothing in these terms excludes liability that cannot lawfully be excluded,
+including liability for intentional misconduct, gross negligence where it
+cannot be excluded, or injury to life, body, or health where exclusion is
+prohibited. You remain responsible for your own backups and system changes.
+
+11. Mandatory law and severability
+
+These terms do not restrict statutory rights that cannot lawfully be restricted.
+If a provision is unenforceable, the remaining provisions continue to apply to
+the extent permitted by law. A failure to enforce a provision is not a waiver.
+
+License version: 1.0
