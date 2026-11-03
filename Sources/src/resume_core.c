@@ -301,8 +301,11 @@ PIRS_EXPORT void ResumeCommit(uintptr_t token,void *renderer) {
     if(!span(item,&file) || !span(item+ITEM_PRESET,&preset) ||
        !span((unsigned char*)renderer+RENDER_FILE,&actual_file) ||
        !span((unsigned char*)renderer+RENDER_PRESET,&actual_preset) ||
-       file.size!=actual_file.size || preset.size!=actual_preset.size ||
-       !bytes_equal(file.data,actual_file.data,file.size) || !bytes_equal(preset.data,actual_preset.data,preset.size)) {
+       file.size!=actual_file.size || !bytes_equal(file.data,actual_file.data,file.size) ||
+       /* The engine can resolve an unspecified preset to an effective preset.
+        * An explicitly named preset still requires an exact match. */
+       (preset.size && (preset.size!=actual_preset.size ||
+                        !bytes_equal(preset.data,actual_preset.data,preset.size)))) {
         pirs_platform_trace("renderer-mismatch",id.mon_a,next,id.count);
         pirs_platform_unlock();return;
     }

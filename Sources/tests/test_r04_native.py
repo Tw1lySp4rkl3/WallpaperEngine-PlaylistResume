@@ -97,7 +97,7 @@ class Engine(native.Engine):
             if self.bits==32 and (0x52021<=rva<0x523a4 or 0x52b7c<=rva<0x52b84):return
         return super().hook(u,address,size,opaque)
 
-    def manual_click(self,position,commit=True):
+    def manual_click(self,position,commit=True,effective_preset=None):
         new=native.HEAP+0x62000;items=self.alloc(self.count*self.desc)
         self.init_playlist(new,items,0x28,0)
         self.parse_settings({'beginfirst':True,'playintro':False,'rememberposition':True,'resumeposition':position},new)
@@ -110,9 +110,9 @@ class Engine(native.Engine):
             self.run(0x518d3,0x518d8,'UI apply')
         assert len(self.dispatches)==1
         self.dispatches.clear()
-        return self.select(commit=commit,force=True)
+        return self.select(commit=commit,force=True,effective_preset=effective_preset)
 
-    def select(self,commit=True,force=False):
+    def select(self,commit=True,force=False,effective_preset=None):
         self.reg(self.spname,SP)
         if self.bits==64:
             self.reg('rbp',SP+0xc8);self.reg('r14',NODE);self.reg('r13',0)
@@ -130,7 +130,8 @@ class Engine(native.Engine):
         path=self.get_string(result);preset=self.get_string(result+self.preset_offset)
         self.wp(NODE+(0x30 if self.bits==64 else 0x20),native.RENDERER)
         self.string(native.RENDERER+(0xe0 if self.bits==64 else 0x94),path)
-        self.string(native.RENDERER+(0x120 if self.bits==64 else 0xc4),preset)
+        self.string(native.RENDERER+(0x120 if self.bits==64 else 0xc4),
+                    preset if effective_preset is None else effective_preset)
         if commit:
             self.reg(self.spname,SP)
             if self.bits==64:
@@ -303,6 +304,16 @@ def main():
         assert e.checkpoint==6
         assert e.get_string(native.RENDERER+(0x120 if bits==64 else 0xc4))=='PRESET_5'
         assert core.records()[0]['index']==5;e.close();cases+=1
+        # Both clicks and normal advances may resolve an unspecified preset.
+        core.clear();e=Engine(core,bits)
+        assert e.select()==1
+        assert e.manual_click(2,effective_preset='Effective')==2
+        assert core.records()[0]['index']==1
+        assert e.select(effective_preset='Effective')==3
+        assert core.records()[0]['index']==2
+        e.close();core.restart();e=Engine(core,bits)
+        assert [e.select(),e.select()]==[1,3]
+        e.close();cases+=1
         # Numeric JSON requests are strictly bounded and reject other types.
         for bad in [None,True,False,-1,0,32769,1<<40,1.5,'2',{},[]]:
             e=Engine(core,bits)

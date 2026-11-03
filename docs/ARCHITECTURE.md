@@ -62,8 +62,9 @@ Following the startup prelude, selection replays the saved wallpaper and continu
 the sorted playlist. A manual click in the lower playlist strip carries a one-shot
 row index in the selection message; it is not written into saved playlist settings.
 Compatibility prompts recheck that the monitor, list and clicked row are still
-current before applying the request. The checkpoint is committed only if the
-renderer file and preset match the selected entry.
+current before applying the request. The renderer must match the selected file
+and any explicitly named preset before the checkpoint is committed. If the
+playlist leaves the preset unspecified, the engine may resolve an effective preset.
 
 The state key combines the monitor ID and ordered file/preset pairs. The binary
 `WPRS0001` format contains a header, record count, CRC32 and fixed-size records
