@@ -1,0 +1,34 @@
+name: PlaylistResume Windows test DLLs
+on:
+  push:
+    branches: [test/playlist-checkpoint-windows]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build and validate both Windows DLLs
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/playlist-env"
+          env_python="$RUNNER_TEMP/playlist-env/bin/python"
+          "$env_python" -m pip install --disable-pip-version-check -r Sources/requirements-analysis.txt ziglang==0.17.0
+          zig_dir=$("$env_python" -c 'from importlib.util import find_spec; from pathlib import Path; print(Path(find_spec("ziglang").origin).parent)')
+          export PIRS_ZIG="$zig_dir/zig"
+          export WE_BUILD_OUTPUT="$RUNNER_TEMP/playlist-resume-test"
+          PYTHONPATH=Sources/tools "$env_python" -c 'from build_r04 import build_dlls; build_dlls()'
+          cd "$WE_BUILD_OUTPUT"
+          sha256sum PlaylistResume32.dll PlaylistResume64.dll > SHA256SUMS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: PlaylistResume-Windows-Test
+          path: |
+            ${{ runner.temp }}/playlist-resume-test/PlaylistResume32.dll
+            ${{ runner.temp }}/playlist-resume-test/PlaylistResume64.dll
+            ${{ runner.temp }}/playlist-resume-test/SHA256SUMS
+          if-no-files-found: error

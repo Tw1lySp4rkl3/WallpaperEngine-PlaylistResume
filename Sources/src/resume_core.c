@@ -50,6 +50,7 @@ typedef struct { const unsigned char *data; uint32_t size; } Span;
 typedef struct { uint64_t a,b; uint32_t count,index; uint64_t used; } Record;
 typedef struct {
     uint64_t mon_a,mon_b,a,b;
+    uint64_t selection_generation;
     uintptr_t node;
     uint32_t expected_next, intro;
     unsigned valid;
@@ -57,6 +58,7 @@ typedef struct {
 typedef struct {
     uintptr_t frame,node;
     uint64_t mon_a,mon_b,a,b;
+    uint64_t selection_generation;
     unsigned valid,manual;
 } Frame;
 typedef struct {
@@ -238,6 +240,7 @@ PIRS_EXPORT void ResumePrepare(void *object,uintptr_t token) {
     if(!s || !f){pirs_platform_unlock();return;}
     f->valid=1;f->frame=token;f->node=(uintptr_t)object;
     f->a=id.a;f->b=id.b;f->mon_a=id.mon_a;f->mon_b=id.mon_b;
+    f->selection_generation=++s->selection_generation;
     unsigned flags=u32(id.node+FLAGS_OFF),next=u32(id.node+INDEX_OFF);
     unsigned requested=(flags&REQUEST_FLAG)?flags>>16:0;
     f->manual=requested>0 && requested<=id.count;
@@ -290,7 +293,7 @@ PIRS_EXPORT void ResumeCommit(uintptr_t token,void *renderer) {
     Identity id;
     if(!identity((void*)call.node,&id) || id.a!=call.a || id.b!=call.b){pirs_platform_unlock();return;}
     int first=0;Session *s=session(&id,&first);
-    if(!s){pirs_platform_unlock();return;}
+    if(!s || s->selection_generation!=call.selection_generation){pirs_platform_unlock();return;}
     s->expected_next=u32(id.node+INDEX_OFF);s->intro=!!(u32(id.node+FLAGS_OFF)&INTRO_FLAG);
     if(s->intro || !renderer){pirs_platform_unlock();return;}
     uint32_t next=s->expected_next;
