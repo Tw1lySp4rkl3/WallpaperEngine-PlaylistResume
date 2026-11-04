@@ -1,29 +1,25 @@
 {
-  "project_version": "1.0",
+  "project_version": "1.0.1",
   "installer_languages": [
     "de",
     "en"
   ],
-  "final_installer_sha256": "14d1b75e7b93bfe86a80e9662e4c014e847a2c405ac11d789305dbf46a0e8d19",
-  "current_patch_catalog": "Sources/patches/patches.json",
-  "legacy_catalog": "Sources/patches/legacy.json",
-  "legacy_version_directories_removed": true,
-  "legacy_recipe_count_without_alias_duplicates": 10,
+  "final_installer_sha256": "afb1de4b2fa858149e0acf374b889eb5e6c7620a84e84045a2587bcf184cffbe",
   "installer_core_tests_passed": 20,
   "compiled_gui_checks_passed": 10,
   "node_regression_tests_passed": 48,
-  "archived_v1_receipt_upgrade_and_restore_tested": true,
-  "actual_windows_gui_tested": false,
-  "gui_test_scope": "Actual compiled x86 Windows GUI and event handlers with substituted Win32 APIs. DE/EN selection, OS-language default, status, dialogs, folder-picker text, worker access error, retained log retranslation, control locks, Unicode paths, DPI geometry, stdcall and heap cleanup. No real Windows rendering or mouse interaction.",
-  "pe_checksum_valid": true,
-  "debug_metadata_removed": true,
-  "writable_executable_sections": false,
-  "runtime_source_unchanged": true,
+  "node_optional_snapshot_tests_skipped": 1,
+  "native_runtime_scenarios": {
+    "64": 41,
+    "32": 41
+  },
+  "windows_playback_confirmed_for": "1.0.1-test",
   "runtime_byte_identity": {
-    "wallpaper32.exe": "e6b36d0f3b610883c184311fa10d7370493ab4deecfb1c721d711d9ef2d1033a",
-    "wallpaper64.exe": "c867f82a129e276985faed0abba7b0e497b5ecaca2b99e330b5d7333fc25634b",
-    "ui/dist/scripts/scripts.js": "be82571f5b129d05d540ce475f5b2955e0b76a204e6e2a1cdf15461e5ab7fb90",
-    "PlaylistResume32.dll": "c43831abf2b3638fb579e2d61d58a21ab77784ea9c76ccef8df8a30e7f85fddd",
-    "PlaylistResume64.dll": "444102da9c499a01b768393286ee0876ce42e01095648dad7c7c72e76022d037"
-  }
+    "wallpaper32.exe": "28e0fc93473747ae4882770fbf35cccca044c893d767503b791fab27d8773cd4",
+    "wallpaper64.exe": "4a319d94b6a2dac8ac75a9856cc2d2ee991aab3b6f67770516b18d5781a9617b",
+    "ui/dist/scripts/scripts.js": "c8413686a752693e20ad845f631ef8b01bb06bca739db42f0e82f7a4caec1085",
+    "PlaylistResume32.dll": "f8ba6171f077eb7a13b91049bdb475aa1775203e2d3a05aefe9bac5d6d2190f0",
+    "PlaylistResume64.dll": "5719f351653eabeaa78433b255600103064a5e98affb56fbf130ef6ddaf56b4f"
+  },
+  "release_installer_gui_test_scope": "Compiled Windows GUI exercised in Unicorn with substituted Win32 APIs."
 }

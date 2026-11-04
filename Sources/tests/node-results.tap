@@ -2,297 +2,303 @@ TAP version 13
 # Subtest: only the playlist strip passes an explicit row selection
 ok 1 - only the playlist strip passes an explicit row selection
   ---
-  duration_ms: 2.268344
+  duration_ms: 6.699841
   type: 'test'
   ...
 # Subtest: real click callbacks emit one-shot positions without changing saved settings
 ok 2 - real click callbacks emit one-shot positions without changing saved settings
   ---
-  duration_ms: 6.769358
+  duration_ms: 15.306976
+  type: 'test'
+  ...
+# Subtest: loaded legacy settings drop the old saved selection without changing the input
+ok 3 - loaded legacy settings drop the old saved selection without changing the input
+  ---
+  duration_ms: 0.941331
   type: 'test'
   ...
 # Subtest: clicking the already visible startup WP1 still emits the reset to position 1
-ok 3 - clicking the already visible startup WP1 still emits the reset to position 1
+ok 4 - clicking the already visible startup WP1 still emits the reset to position 1
   ---
-  duration_ms: 1.754722
+  duration_ms: 1.593786
   type: 'test'
   ...
 # Subtest: duplicate wallpapers retain the clicked row and its preset
-ok 4 - duplicate wallpapers retain the clicked row and its preset
+ok 5 - duplicate wallpapers retain the clicked row and its preset
   ---
-  duration_ms: 4.869802
+  duration_ms: 2.053659
   type: 'test'
   ...
 # Subtest: ordinary library selection and disabled or other playlist modes use the original callback
-ok 5 - ordinary library selection and disabled or other playlist modes use the original callback
+ok 6 - ordinary library selection and disabled or other playlist modes use the original callback
   ---
-  duration_ms: 4.319686
+  duration_ms: 5.53943
   type: 'test'
   ...
 # Subtest: monitor or playlist changes during native compatibility prompts discard a stale click
-ok 6 - monitor or playlist changes during native compatibility prompts discard a stale click
+ok 7 - monitor or playlist changes during native compatibility prompts discard a stale click
   ---
-  duration_ms: 3.84349
+  duration_ms: 8.371765
   type: 'test'
   ...
 # Subtest: uninstalled entries never send a position request
-ok 7 - uninstalled entries never send a position request
+ok 8 - uninstalled entries never send a position request
   ---
-  duration_ms: 1.06562
+  duration_ms: 1.455236
   type: 'test'
   ...
 # Subtest: direct R03 upgrade uses neutral names and preserves exact checkpoint records and logs
-ok 8 - direct R03 upgrade uses neutral names and preserves exact checkpoint records and logs
+ok 9 - direct R03 upgrade uses neutral names and preserves exact checkpoint records and logs
   ---
-  duration_ms: 391.125512
+  duration_ms: 817.841942
   type: 'test'
   ...
 # Subtest: an existing valid neutral cache wins over an older R03 cache
-ok 9 - an existing valid neutral cache wins over an older R03 cache
+ok 10 - an existing valid neutral cache wins over an older R03 cache
   ---
-  duration_ms: 172.818772
+  duration_ms: 358.501903
   type: 'test'
   ...
 # Subtest: unknown old DLLs and corrupt legacy caches stop before any program mutation
-ok 10 - unknown old DLLs and corrupt legacy caches stop before any program mutation
+ok 11 - unknown old DLLs and corrupt legacy caches stop before any program mutation
   ---
-  duration_ms: 158.704391
+  duration_ms: 208.062154
   type: 'test'
   ...
 # Subtest: failed R03 migration rename 1 returns all code/cache/log bytes to R03
-ok 11 - failed R03 migration rename 1 returns all code/cache/log bytes to R03
+ok 12 - failed R03 migration rename 1 returns all code/cache/log bytes to R03
   ---
-  duration_ms: 141.415885
+  duration_ms: 234.832451
   type: 'test'
   ...
 # Subtest: failed R03 migration rename 2 returns all code/cache/log bytes to R03
-ok 12 - failed R03 migration rename 2 returns all code/cache/log bytes to R03
+ok 13 - failed R03 migration rename 2 returns all code/cache/log bytes to R03
   ---
-  duration_ms: 151.789742
+  duration_ms: 198.37824
   type: 'test'
   ...
 # Subtest: failed R03 migration rename 3 returns all code/cache/log bytes to R03
-ok 13 - failed R03 migration rename 3 returns all code/cache/log bytes to R03
+ok 14 - failed R03 migration rename 3 returns all code/cache/log bytes to R03
   ---
-  duration_ms: 153.592952
+  duration_ms: 190.405532
   type: 'test'
   ...
 # Subtest: failed R03 migration rename 4 returns all code/cache/log bytes to R03
-ok 14 - failed R03 migration rename 4 returns all code/cache/log bytes to R03
+ok 15 - failed R03 migration rename 4 returns all code/cache/log bytes to R03
   ---
-  duration_ms: 156.853803
+  duration_ms: 303.279315
   type: 'test'
   ...
 # Subtest: failed R03 migration rename 5 returns all code/cache/log bytes to R03
-ok 15 - failed R03 migration rename 5 returns all code/cache/log bytes to R03
+ok 16 - failed R03 migration rename 5 returns all code/cache/log bytes to R03
   ---
-  duration_ms: 182.23842
+  duration_ms: 226.111444
   type: 'test'
   ...
 # Subtest: failed R03 migration rename 6 returns all code/cache/log bytes to R03
-ok 16 - failed R03 migration rename 6 returns all code/cache/log bytes to R03
+ok 17 - failed R03 migration rename 6 returns all code/cache/log bytes to R03
   ---
-  duration_ms: 199.393911
+  duration_ms: 205.893772
   type: 'test'
   ...
 # Subtest: failed R03 migration rename 7 returns all code/cache/log bytes to R03
-ok 17 - failed R03 migration rename 7 returns all code/cache/log bytes to R03
+ok 18 - failed R03 migration rename 7 returns all code/cache/log bytes to R03
   ---
-  duration_ms: 209.930133
+  duration_ms: 249.949741
   type: 'test'
   ...
 # Subtest: failed removal of PiPlaylistResume64.dll rolls the complete upgrade back
-ok 18 - failed removal of PiPlaylistResume64.dll rolls the complete upgrade back
+ok 19 - failed removal of PiPlaylistResume64.dll rolls the complete upgrade back
   ---
-  duration_ms: 184.750707
+  duration_ms: 217.467399
   type: 'test'
   ...
 # Subtest: failed removal of bin/pi-playlist-resume-r03.bin rolls the complete upgrade back
-ok 19 - failed removal of bin/pi-playlist-resume-r03.bin rolls the complete upgrade back
+ok 20 - failed removal of bin/pi-playlist-resume-r03.bin rolls the complete upgrade back
   ---
-  duration_ms: 188.175754
+  duration_ms: 215.543335
   type: 'test'
   ...
 # Subtest: failed removal of bin/pi-playlist-resume-r03.log rolls the complete upgrade back
-ok 20 - failed removal of bin/pi-playlist-resume-r03.log rolls the complete upgrade back
+ok 21 - failed removal of bin/pi-playlist-resume-r03.log rolls the complete upgrade back
   ---
-  duration_ms: 191.03198
+  duration_ms: 216.079424
   type: 'test'
   ...
 # Subtest: R03 can be restored directly and missing old DLLs do not prevent upgrading
-ok 21 - R03 can be restored directly and missing old DLLs do not prevent upgrading
+ok 22 - R03 can be restored directly and missing old DLLs do not prevent upgrading
   ---
-  duration_ms: 313.212139
+  duration_ms: 336.28459
   type: 'test'
   ...
 # Subtest: fresh installation creates no empty checkpoint file and contains no personal filenames
-ok 22 - fresh installation creates no empty checkpoint file and contains no personal filenames
+ok 23 - fresh installation creates no empty checkpoint file and contains no personal filenames
   ---
-  duration_ms: 98.697208
+  duration_ms: 111.832671
   type: 'test'
   ...
 # Subtest: status accepts original EXEs/UI and absent optional DLLs without creating files
-ok 23 - status accepts original EXEs/UI and absent optional DLLs without creating files
+ok 24 - status accepts original EXEs/UI and absent optional DLLs without creating files
   ---
-  duration_ms: 22.79938
+  duration_ms: 87.093778
   type: 'test'
   ...
 # Subtest: all five files install, repeated apply is idempotent, inverse restores exact originals
-ok 24 - all five files install, repeated apply is idempotent, inverse restores exact originals
+ok 25 - all five files install, repeated apply is idempotent, inverse restores exact originals
   ---
-  duration_ms: 331.63188
+  duration_ms: 751.606993
   type: 'test'
   ...
 # Subtest: direct R02 upgrade first reconstructs originals and keeps original backups
-ok 25 - direct R02 upgrade first reconstructs originals and keeps original backups
+ok 26 - direct R02 upgrade first reconstructs originals and keeps original backups
   ---
-  duration_ms: 319.796759
+  duration_ms: 490.773036
   type: 'test'
   ...
 # Subtest: R04 restore can also recover a known R02 installation
-ok 26 - R04 restore can also recover a known R02 installation
+ok 27 - R04 restore can also recover a known R02 installation
   ---
-  duration_ms: 136.785579
+  duration_ms: 195.00251
   type: 'test'
   ...
 # Subtest: restoration does not require backup files
-ok 27 - restoration does not require backup files
+ok 28 - restoration does not require backup files
   ---
-  duration_ms: 204.022064
+  duration_ms: 291.713756
   type: 'test'
   ...
 # Subtest: one unknown UI or executable prevents DLL creation and all mutations
-ok 28 - one unknown UI or executable prevents DLL creation and all mutations
+ok 29 - one unknown UI or executable prevents DLL creation and all mutations
   ---
-  duration_ms: 39.413286
+  duration_ms: 39.1404
   type: 'test'
   ...
 # Subtest: an unknown same-named DLL is never overwritten
-ok 29 - an unknown same-named DLL is never overwritten
+ok 30 - an unknown same-named DLL is never overwritten
   ---
-  duration_ms: 14.046789
+  duration_ms: 19.349912
   type: 'test'
   ...
 # Subtest: bad DLL payload is refused before backups or executable writes
-ok 30 - bad DLL payload is refused before backups or executable writes
+ok 31 - bad DLL payload is refused before backups or executable writes
   ---
-  duration_ms: 50.800767
+  duration_ms: 57.051562
   type: 'test'
   ...
 # Subtest: invalid native offsets, overlap and nonunique UI replacements are refused
-ok 31 - invalid native offsets, overlap and nonunique UI replacements are refused
+ok 32 - invalid native offsets, overlap and nonunique UI replacements are refused
   ---
-  duration_ms: 54.76511
+  duration_ms: 48.777996
   type: 'test'
   ...
 # Subtest: replacement failure 2 restores originals and removes newly created DLLs
-ok 32 - replacement failure 2 restores originals and removes newly created DLLs
+ok 33 - replacement failure 2 restores originals and removes newly created DLLs
   ---
-  duration_ms: 66.223212
+  duration_ms: 86.458542
   type: 'test'
   ...
 # Subtest: replacement failure 3 restores originals and removes newly created DLLs
-ok 33 - replacement failure 3 restores originals and removes newly created DLLs
+ok 34 - replacement failure 3 restores originals and removes newly created DLLs
   ---
-  duration_ms: 64.72474
+  duration_ms: 228.510706
   type: 'test'
   ...
 # Subtest: replacement failure 4 restores originals and removes newly created DLLs
-ok 34 - replacement failure 4 restores originals and removes newly created DLLs
+ok 35 - replacement failure 4 restores originals and removes newly created DLLs
   ---
-  duration_ms: 72.116962
+  duration_ms: 169.738227
   type: 'test'
   ...
 # Subtest: replacement failure 5 restores originals and removes newly created DLLs
-ok 35 - replacement failure 5 restores originals and removes newly created DLLs
+ok 36 - replacement failure 5 restores originals and removes newly created DLLs
   ---
-  duration_ms: 92.964877
+  duration_ms: 158.521018
   type: 'test'
   ...
 # Subtest: a failed R02 upgrade returns exactly to R02, with no new helper DLLs
-ok 36 - a failed R02 upgrade returns exactly to R02, with no new helper DLLs
+ok 37 - a failed R02 upgrade returns exactly to R02, with no new helper DLLs
   ---
-  duration_ms: 136.612852
+  duration_ms: 203.995667
   type: 'test'
   ...
 # Subtest: failure deleting the second DLL during restore rebuilds the complete R04 installation
-ok 37 - failure deleting the second DLL during restore rebuilds the complete R04 installation
+ok 38 - failure deleting the second DLL during restore rebuilds the complete R04 installation
   ---
-  duration_ms: 253.724435
+  duration_ms: 449.418237
   type: 'test'
   ...
 # Subtest: an altered backup is preserved and blocks mutation
-ok 38 - an altered backup is preserved and blocks mutation
+ok 39 - an altered backup is preserved and blocks mutation
   ---
-  duration_ms: 53.029006
+  duration_ms: 84.173853
   type: 'test'
   ...
 # Subtest: missing known helper DLLs can be repaired without rewriting patched executables
-ok 39 - missing known helper DLLs can be repaired without rewriting patched executables
+ok 40 - missing known helper DLLs can be repaired without rewriting patched executables
   ---
-  duration_ms: 172.537115
+  duration_ms: 221.35695
   type: 'test'
   ...
 # Subtest: latest failure snapshot contains three zero counters without a lost checkbox option
-ok 40 - latest failure snapshot contains three zero counters without a lost checkbox option
+ok 41 - latest failure snapshot contains three zero counters without a lost checkbox option # SKIP
   ---
-  duration_ms: 16.127504
+  duration_ms: 0.509599
   type: 'test'
   ...
 # Subtest: the independent cache format rejects truncation, invalid counts and bad checksums
-ok 41 - the independent cache format rejects truncation, invalid counts and bad checksums
+ok 42 - the independent cache format rejects truncation, invalid counts and bad checksums
   ---
-  duration_ms: 1.422599
+  duration_ms: 1.218639
   type: 'test'
   ...
 # Subtest: the complete patched UI script parses and restores byte-for-byte
-ok 42 - the complete patched UI script parses and restores byte-for-byte
+ok 43 - the complete patched UI script parses and restores byte-for-byte
   ---
-  duration_ms: 61.913231
+  duration_ms: 48.02388
   type: 'test'
   ...
 # Subtest: new checkbox binds to rememberposition in the existing playlist modal
-ok 43 - new checkbox binds to rememberposition in the existing playlist modal
+ok 44 - new checkbox binds to rememberposition in the existing playlist modal
   ---
-  duration_ms: 1.773721
+  duration_ms: 2.099939
   type: 'test'
   ...
 # Subtest: label toggle enables remembering and clears the native intro-only setting
-ok 44 - label toggle enables remembering and clears the native intro-only setting
+ok 45 - label toggle enables remembering and clears the native intro-only setting
   ---
-  duration_ms: 1.49719
+  duration_ms: 1.468887
   type: 'test'
   ...
 # Subtest: checkbox binding and settings copy retain the new boolean for save/reopen
-ok 45 - checkbox binding and settings copy retain the new boolean for save/reopen
+ok 46 - checkbox binding and settings copy retain the new boolean for save/reopen
   ---
-  duration_ms: 1.615636
+  duration_ms: 2.122849
   type: 'test'
   ...
 # Subtest: the new label cannot enable the feature for a random list or without first-start
-ok 46 - the new label cannot enable the feature for a random list or without first-start
+ok 47 - the new label cannot enable the feature for a random list or without first-start
   ---
-  duration_ms: 2.191529
+  duration_ms: 3.662207
   type: 'test'
   ...
 # Subtest: native intro-only option still works when remembering is off
-ok 47 - native intro-only option still works when remembering is off
+ok 48 - native intro-only option still works when remembering is off
   ---
-  duration_ms: 0.817091
+  duration_ms: 1.896352
   type: 'test'
   ...
 # Subtest: UI serialization passes arbitrary playlist settings rather than a native-key whitelist
-ok 48 - UI serialization passes arbitrary playlist settings rather than a native-key whitelist
+ok 49 - UI serialization passes arbitrary playlist settings rather than a native-key whitelist
   ---
-  duration_ms: 1.730907
+  duration_ms: 2.912446
   type: 'test'
   ...
-1..48
-# tests 48
+1..49
+# tests 49
 # suites 0
 # pass 48
 # fail 0
 # cancelled 0
-# skipped 0
+# skipped 1
 # todo 0
-# duration_ms 3012.51245
+# duration_ms 4287.725773

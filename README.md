@@ -1,8 +1,8 @@
-# PlaylistResume v1.0
+# PlaylistResume v1.0.1
 
 Unofficial playlist resume mod for **Wallpaper Engine 2.8.42 – Steam Edition**.
 
-**[Download PlaylistResume_v1.0.zip](https://github.com/Tw1lySp4rkl3/WallpaperEngine-PlaylistResume/raw/refs/heads/main/downloads/PlaylistResume_v1.0.zip)**
+**[Download PlaylistResume_v1.0.1.zip](https://github.com/Tw1lySp4rkl3/WallpaperEngine-PlaylistResume/releases/download/v1.0.1/PlaylistResume_v1.0.1.zip)**
 
 Windows | 32-bit and 64-bit Wallpaper Engine | DE/EN installer
 
@@ -37,7 +37,7 @@ the previous session's remaining time is not restored.
 
 ### Install
 
-1. Download **PlaylistResume_v1.0.zip** using the link above and extract the entire ZIP.
+1. Download **PlaylistResume_v1.0.1.zip** using the link above and extract the entire ZIP.
 2. Fully exit Wallpaper Engine using its **system tray icon**. Closing only the
    settings window is not enough.
 3. Run **PlaylistResumeSetup.exe**.
@@ -126,7 +126,7 @@ Wallpaper ein volles Zeitintervall; die alte Restlaufzeit wird nicht übernommen
 
 ### Installation
 
-1. **PlaylistResume_v1.0.zip** über den Link oben herunterladen und vollständig entpacken.
+1. **PlaylistResume_v1.0.1.zip** über den Link oben herunterladen und vollständig entpacken.
 2. Wallpaper Engine über das **Symbol im Infobereich der Taskleiste vollständig
    beenden**. Nur das Einstellungsfenster zu schließen reicht nicht.
 3. **PlaylistResumeSetup.exe** starten.
@@ -211,8 +211,8 @@ Developer documentation: [Build](docs/BUILD.md), [Architecture](docs/ARCHITECTUR
 
 ## Verification / Prüfung
 
-The installer and runtime are the same binaries as the tested v1.0 package.
-The project author reports successful installation and playback on Windows.
+The v1.0.1 runtime matches the Windows-tested 1.0.1-test preview.
+The release installer reports v1.0.1 and recognizes v1.0 and the test builds.
 Automated installer-core, compiled-GUI emulation, and JavaScript regression
 checks are documented in [Testing](docs/TESTING.md). These checks cover the
 supported files and tested scenarios, not every Windows configuration.

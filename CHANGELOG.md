@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.1 - 2026-11-04
+
+- Fix a saved playlist click being replayed at startup and overwriting the latest position.
+- Restore the startup sequence of wallpaper 1 followed by the last saved wallpaper.
+- Keep the v1.0 and test builds recognizable for direct upgrades and restore.
+
+Supported engine version: Wallpaper Engine 2.8.42 Steam Edition.
+
 ## v1.0 - 2026-10-31
 
 - Remember sorted playlist positions separately for each monitor and playlist.

@@ -89,7 +89,7 @@ test('native intro-only option still works when remembering is off',()=>{
 });
 
 test('UI serialization passes arbitrary playlist settings rather than a native-key whitelist',()=>{
-  assert.match(patched,/function qe\(e\)\{return\{settings:angular.copy\(e.settings\)/);
+  assert.match(patched,/function qe\(e\)\{return\{settings:resumePlaylistSettings\(e.settings\)/);
   assert.match(patched,/angular.merge\(V.selectedMonitor.playlist.settings,e\)/);
   const c=controller({...base,rememberposition:true,customExistingSetting:'keep'});
   assert.equal(c.scope.settings.customExistingSetting,'keep');

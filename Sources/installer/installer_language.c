@@ -1,8 +1,8 @@
 #include "installer_language.h"
 typedef struct { const char *de,*en; int prefix; } Translation;
 static const Translation translations[]={
-    {"Vollständiger Installer für Wallpaper Engine 2.8.42 (Steam).\r\nInstalliert den Mod direkt oder übernimmt eine vorhandene Vorabversion.",
-     "Complete installer for Wallpaper Engine 2.8.42 (Steam).\r\nInstalls the mod or updates an existing preview version.",0},
+    {"Vollständiger Installer für Wallpaper Engine 2.8.42 (Steam).\r\nInstalliert den Mod direkt oder aktualisiert eine vorhandene Installation.",
+     "Complete installer for Wallpaper Engine 2.8.42 (Steam).\r\nInstalls the mod or updates an existing installation.",0},
     {"Wallpaper-Engine-Ordner","Wallpaper Engine folder",0},
     {"Bitte den Ordner auswählen, in dem wallpaper32.exe und wallpaper64.exe liegen.\r\nDen Ordner wallpaper_engine wählen – nicht bin oder den Steam-Hauptordner.",
      "Select the folder containing wallpaper32.exe and wallpaper64.exe.\r\nChoose wallpaper_engine, rather than bin or the main Steam folder.",0},
@@ -37,6 +37,7 @@ static const Translation translations[]={
     {"Unbekannte Mod-Installationsinfo","Unknown mod installation information",0},
     {"Die vorhandene Installationsinfo gehört nicht zu dieser Ausgabe.","The existing installation information does not match this release.",0},
     {"Installiert – v1.0","Installed – v1.0",0},
+    {"Installiert – v1.0.1","Installed – v1.0.1",0},
     {"Installiert – Vorabversion R04","Installed – preview R04",0},
     {"Installiert – Vorabversion R03","Installed – preview R03",0},
     {"Installiert – Vorabversion R02","Installed – preview R02",0},
@@ -51,7 +52,7 @@ static const Translation translations[]={
     {"Nicht genügend Arbeitsspeicher.","Not enough memory.",0},
     {"Original konnte nicht rekonstruiert werden: ","Original could not be reconstructed: ",1},
     {"Ungültige Patchdaten: ","Invalid patch data: ",1},
-    {"PlaylistResume v1.0 ist bereits vollständig installiert.","PlaylistResume v1.0 is already fully installed.",0},
+    {"PlaylistResume v1.0.1 ist bereits vollständig installiert.","PlaylistResume v1.0.1 is already fully installed.",0},
     {"Die Originaldateien sind bereits vorhanden.","The original files are already present.",0},
     {"Wallpaper Engine läuft noch. Bitte über das Taskleistensymbol vollständig beenden und erneut versuchen.",
      "Wallpaper Engine is still running. Fully exit it using the system tray icon, then try again.",0},
@@ -62,7 +63,7 @@ static const Translation translations[]={
     {"Prüfung nach dem Ersetzen fehlgeschlagen: ","Verification after replacement failed: ",1},
     {"Übernommen: ","Applied: ",1},
     {"Entfernt: ","Removed: ",1},
-    {"PlaylistResume v1.0 wurde installiert.","PlaylistResume v1.0 has been installed.",0},
+    {"PlaylistResume v1.0.1 wurde installiert.","PlaylistResume v1.0.1 has been installed.",0},
     {"Originaldateien wurden wiederhergestellt. Positionen und Einstellungen bleiben erhalten.",
      "Original files have been restored. Positions and settings are preserved.",0},
     {"Sicherung: ","Backup: ",1},

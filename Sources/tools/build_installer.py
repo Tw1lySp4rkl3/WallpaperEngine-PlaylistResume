@@ -43,11 +43,11 @@ def main():
     assert p.verify_checksum() and p.OPTIONAL_HEADER.Subsystem==2
     assert not p.OPTIONAL_HEADER.DATA_DIRECTORY[6].VirtualAddress
     assert not any(s.Characteristics&0x20000000 and s.Characteristics&0x80000000 for s in p.sections)
-    assert p.VS_FIXEDFILEINFO[0].FileVersionMS==0x10000
-    report={'filename':dest.name,'project_version':'1.0','architecture':'x86 (also runs on x64 Windows)',
+    assert p.VS_FIXEDFILEINFO[0].FileVersionMS==0x10000 and p.VS_FIXEDFILEINFO[0].FileVersionLS==0x10000
+    report={'filename':dest.name,'project_version':'1.0.1','architecture':'x86 (also runs on x64 Windows)',
             'installer_languages':['de','en'],'default_language':'German for German Windows display languages, otherwise English',
             'size':len(data),'sha256':hashlib.sha256(data).hexdigest(),'subsystem':'Windows GUI',
             'imports':[i.dll.decode() for i in p.DIRECTORY_ENTRY_IMPORT],
-            'runtime_payload':'Byte-identical to the Windows-confirmed R04 files; versioned installation receipt added.'}
+            'runtime_payload':'Runtime payloads match the Windows-tested 1.0.1-test installer.'}
     (OUT/'INSTALLER-BUILD.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
 if __name__=='__main__':main()

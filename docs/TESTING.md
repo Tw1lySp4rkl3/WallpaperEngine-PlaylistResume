@@ -1,15 +1,13 @@
 # Testing and verification limits
 
-The playlist behavior, profiles, multiple monitors and manual row selection were
-confirmed by the user in Wallpaper Engine on Windows. The runtime EXE/UI/DLL patch
-payloads in this package retain those confirmed hashes.
+The project author confirmed on Windows that the 1.0.1-test preview fixes the
+startup regression. v1.0.1 embeds the same runtime bytes as that preview.
+The release installer changes the displayed version and recognizes the test
+receipt and v1.0 for upgrades and restore.
 
-The installer is built as an actual x86 Windows GUI executable. Automated checks
-execute its compiled code with substituted Win32 APIs; they do **not** render a
-real Windows window or verify real Windows file permissions. The project author subsequently reported successful installation and normal
-operation of the v1.0 package on Windows. This user report is separate from the
-automated checks and is not an exhaustive test of Windows configurations.
-The included historical JSON reports describe the checks at build time.
+The installer is built as an x86 Windows GUI executable. Automated checks
+execute its compiled code with substituted Win32 APIs. These checks cover the
+tested scenarios. Real Windows file permissions and other setups can differ.
 
 ## Run checks
 
@@ -28,7 +26,7 @@ The portable C tests compile the actual core and embedded recipes, replacing onl
 filesystem/process calls. They check original and legacy versions, full install,
 repeat install, repair, exact restore, state migration, unknown files/receipts,
 process guards, backup integrity and failure rollback. Allocation counts must
-return to zero. An additional generated build treats v1.0 as an archived release
+return to zero. An additional generated build treats the current version as an archived release
 and tests its receipt, direct upgrade and restore.
 
 The GUI checks boot the real executable and invoke its window handlers in Unicorn.
@@ -43,7 +41,7 @@ is a test reference; it is not the installer and is not needed by end users.
 
 Detailed reports are included in `Sources/tests/INSTALLER-CORE-RESULTS.json`,
 `INSTALLER-GUI-RESULTS.json`, `INSTALLER-BUILD.json` and `RELEASE-VALIDATION.json`.
-Earlier native instruction/DLL reports remain as evidence for the unchanged runtime.
+The native instruction and DLL reports cover the v1.0.1 runtime.
 
 ## Optional runtime instruction tests
 

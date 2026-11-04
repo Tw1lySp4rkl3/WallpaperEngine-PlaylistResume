@@ -1,4 +1,4 @@
-"""Rebuild the unchanged Windows-confirmed runtime with v1.0 manifest metadata."""
+"""Rebuild the runtime using the current catalogue version."""
 import json
 import build_r04
 from patch_catalog import load_catalog

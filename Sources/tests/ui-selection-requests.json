@@ -4,8 +4,7 @@
       "mode": "timer",
       "order": "sorted",
       "beginfirst": true,
-      "rememberposition": true,
-      "resumeposition": 1
+      "rememberposition": true
     },
     "name": "Test playlist",
     "items": [
@@ -19,15 +18,15 @@
       "WP_00008",
       "WP_00009",
       "WP_00010"
-    ]
+    ],
+    "resumeposition": 1
   },
   {
     "settings": {
       "mode": "timer",
       "order": "sorted",
       "beginfirst": true,
-      "rememberposition": true,
-      "resumeposition": 2
+      "rememberposition": true
     },
     "name": "Test playlist",
     "items": [
@@ -41,15 +40,15 @@
       "WP_00008",
       "WP_00009",
       "WP_00010"
-    ]
+    ],
+    "resumeposition": 2
   },
   {
     "settings": {
       "mode": "timer",
       "order": "sorted",
       "beginfirst": true,
-      "rememberposition": true,
-      "resumeposition": 7
+      "rememberposition": true
     },
     "name": "Test playlist",
     "items": [
@@ -63,15 +62,15 @@
       "WP_00008",
       "WP_00009",
       "WP_00010"
-    ]
+    ],
+    "resumeposition": 7
   },
   {
     "settings": {
       "mode": "timer",
       "order": "sorted",
       "beginfirst": true,
-      "rememberposition": true,
-      "resumeposition": 10
+      "rememberposition": true
     },
     "name": "Test playlist",
     "items": [
@@ -85,6 +84,7 @@
       "WP_00008",
       "WP_00009",
       "WP_00010"
-    ]
+    ],
+    "resumeposition": 10
   }
 ]

@@ -18,7 +18,7 @@ static HINSTANCE instance;static HFONT font;static int dpi=96,busy,root_valid;
 static PrWindows *platform;static PrStatus current_status;static PrLanguage language;
 static WCHAR input[PR_PATH_CAP],default_path[PR_PATH_CAP],line[PR_PATH_CAP];
 static const WCHAR CLASS_NAME[]=L"PlaylistResumeSetupWindow";
-static const char INTRODUCTION[]="Vollständiger Installer für Wallpaper Engine 2.8.42 (Steam).\r\nInstalliert den Mod direkt oder übernimmt eine vorhandene Vorabversion.";
+static const char INTRODUCTION[]="Vollständiger Installer für Wallpaper Engine 2.8.42 (Steam).\r\nInstalliert den Mod direkt oder aktualisiert eine vorhandene Installation.";
 static const char FOLDER_HELP[]="Bitte den Ordner auswählen, in dem wallpaper32.exe und wallpaper64.exe liegen.\r\nDen Ordner wallpaper_engine wählen – nicht bin oder den Steam-Hauptordner.";
 static const char FOOTER[]="Die benötigten Playlist-Einstellungen stehen in README.md.";
 typedef struct LogEntry {struct LogEntry *next;DWORD error_code;int system_error;char text[];} LogEntry;
@@ -129,7 +129,7 @@ static void choose_folder(void){
     if(selected){if(SHGetPathFromIDListW(selected,input)){SetWindowTextW(directory,input);KillTimer(window,1);status();}CoTaskMemFree(selected);}
 }
 static void error_box(HWND h,const char *message){
-    WCHAR *wide=localized(message);if(wide){MessageBoxW(h,wide,L"PlaylistResume v1.0",MB_OK|MB_ICONERROR);pr_free(wide);}
+    WCHAR *wide=localized(message);if(wide){MessageBoxW(h,wide,L"PlaylistResume v1.0.1",MB_OK|MB_ICONERROR);pr_free(wide);}
 }
 static LRESULT CALLBACK procedure(HWND h,UINT message,WPARAM w,LPARAM l){
     switch(message){
@@ -162,7 +162,7 @@ void WinMainCRTStartup(void){
     instance=GetModuleHandleW(0);language=pr_default_language(GetUserDefaultUILanguage());
     HANDLE mutex=CreateMutexW(0,FALSE,L"Local\\PlaylistResumeSetup");
     if(mutex&&GetLastError()==ERROR_ALREADY_EXISTS){HWND other=FindWindowW(CLASS_NAME,0);if(other){ShowWindow(other,SW_RESTORE);SetForegroundWindow(other);}CloseHandle(mutex);ExitProcess(0);}
-    platform=pr_alloc(sizeof *platform);if(!platform){MessageBoxW(0,language==PR_GERMAN?L"Nicht genügend Arbeitsspeicher.":L"Not enough memory.",L"PlaylistResume v1.0",MB_OK|MB_ICONERROR);ExitProcess(1);}
+    platform=pr_alloc(sizeof *platform);if(!platform){MessageBoxW(0,language==PR_GERMAN?L"Nicht genügend Arbeitsspeicher.":L"Not enough memory.",L"PlaylistResume v1.0.1",MB_OK|MB_ICONERROR);ExitProcess(1);}
     SetProcessDPIAware();HDC screen=GetDC(0);if(screen){dpi=GetDeviceCaps(screen,LOGPIXELSY);ReleaseDC(0,screen);}if(dpi<96)dpi=96;
     font=CreateFontW(-MulDiv(9,dpi,72),0,0,0,FW_NORMAL,FALSE,FALSE,FALSE,DEFAULT_CHARSET,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,L"Segoe UI");
     WNDCLASSW cls;memset(&cls,0,sizeof cls);cls.lpfnWndProc=procedure;cls.hInstance=instance;cls.hCursor=LoadCursorW(0,IDC_ARROW);
@@ -174,9 +174,9 @@ void WinMainCRTStartup(void){
     int width=rect.right-rect.left,height=rect.bottom-rect.top;
     int x=area.left+(area.right-area.left-width)/2,y=area.top+(area.bottom-area.top-height)/2;
     if(x<area.left)x=area.left;if(y<area.top)y=area.top;
-    window=CreateWindowExW(WS_EX_CONTROLPARENT,CLASS_NAME,L"PlaylistResume v1.0",style,x,y,width,height,0,0,instance,0);
+    window=CreateWindowExW(WS_EX_CONTROLPARENT,CLASS_NAME,L"PlaylistResume v1.0.1",style,x,y,width,height,0,0,instance,0);
     if(!window)ExitProcess(1);
-    control(L"STATIC","PlaylistResume v1.0",0,18,16,410,24,0,0);
+    control(L"STATIC","PlaylistResume v1.0.1",0,18,16,410,24,0,0);
     control(L"STATIC","Sprache / Language",0,444,20,120,20,0,0);
     language_box=control(L"COMBOBOX","",WS_TABSTOP|WS_VSCROLL|CBS_DROPDOWNLIST,570,16,132,90,ID_LANGUAGE,0);
     SendMessageW(language_box,CB_ADDSTRING,0,(LPARAM)L"Deutsch");SendMessageW(language_box,CB_ADDSTRING,0,(LPARAM)L"English");

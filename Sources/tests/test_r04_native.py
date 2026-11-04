@@ -54,6 +54,8 @@ class Engine(native.Engine):
     def __init__(self,core,bits,*args,monitor='DISPLAY_TEST_1',**kwargs):
         self.core=core
         self.dispatches=[]
+        self.request_payload={}
+        self.persisted_payload={}
         super().__init__(bits,*args,**kwargs)
         self.string(NODE+(0x10 if bits==64 else 8),monitor)
         self.u.mem_map(API_PREPARE,0x1000)
@@ -79,6 +81,36 @@ class Engine(native.Engine):
             self.ret(0)
             return
         rva=address-self.base
+        if self.phase in ('UI request', 'UI copy'):
+            copy, erase, parse, lookup = ((0x85520,0x878f0,0x75a90,0x87490) if self.bits==64
+                                         else (0x67150,0x69370,0x5c6c0,0x683f0))
+            cx=self.reg('rcx' if self.bits==64 else 'ecx')
+            sp=self.reg(self.spname)
+            arg=lambda i:self.rp(sp+self.ptr*(i+1))
+            dx=self.reg('rdx') if self.bits==64 else arg(0)
+            if rva==copy:
+                assert dx==native.JSON_OBJECT
+                self.persisted_payload=dict(self.request_payload)
+                self.write(cx+8,b'\x07')
+                self.wp(cx,cx)
+                self.ret(cx,0 if self.bits==64 else 4);return
+            if rva==erase:
+                dest=native.JSON_OBJECT+0x100
+                assert cx==dest
+                view=dx
+                key=self.read(self.rp(view),self.r32(view+self.ptr)>>2).decode()
+                self.persisted_payload.pop(key,None)
+                self.ret(1,0 if self.bits==64 else 4);return
+            if rva==parse:
+                assert dx==native.JSON_OBJECT
+                self.ret(0,0 if self.bits==64 else 8);return
+            if rva==lookup:
+                assert cx==native.JSON_OBJECT
+                start,end=(dx,self.reg('r8')) if self.bits==64 else (arg(0),arg(1))
+                value=self.request_payload.get(self.read(start,end-start).decode())
+                self.json_value(value)
+                self.ret(native.JSON_VALUE if value is not None else 0,0 if self.bits==64 else 8);return
+            if rva in (0x66cb6,0x66c1f,0x5188c,0x5182c):return
         if self.phase=='UI apply':
             if rva==(0x67a00 if self.bits==64 else 0x51fb0):
                 if self.bits==64:
@@ -97,10 +129,37 @@ class Engine(native.Engine):
             if self.bits==32 and (0x52021<=rva<0x523a4 or 0x52b7c<=rva<0x52b84):return
         return super().hook(u,address,size,opaque)
 
-    def manual_click(self,position,commit=True):
+    def parse_live_request(self,payload,dest=None):
+        dest=dest or self.playlist
+        self.request_payload=payload
+        self.parse_settings(payload['settings'],dest)
+        self.reg(self.spname,SP)
+        self.write(native.JSON_OBJECT+8,b'\x07')
+        if self.bits==64:
+            self.reg('rdx',native.JSON_OBJECT);self.reg('r8',dest)
+            self.run(0x66cb6,0x66cbb,'UI request')
+        else:
+            self.wp(SP,native.JSON_OBJECT);self.wp(SP+4,dest)
+            self.run(0x5188c,0x51891,'UI request')
+        return self.r32(dest+self.flag_offset)
+
+    def copy_request_for_config(self,payload):
+        self.request_payload=payload
+        self.reg(self.spname,SP)
+        dest=native.JSON_OBJECT+0x100
+        if self.bits==64:
+            self.reg('rcx',dest);self.reg('rdx',native.JSON_OBJECT)
+            self.run(0x66c1f,0x66c24,'UI copy')
+        else:
+            self.reg('ecx',dest);self.wp(SP,native.JSON_OBJECT)
+            self.run(0x5182c,0x51831,'UI copy')
+        return self.persisted_payload
+
+    def manual_click(self,position,commit=True,effective_preset=None):
         new=native.HEAP+0x62000;items=self.alloc(self.count*self.desc)
         self.init_playlist(new,items,0x28,0)
-        self.parse_settings({'beginfirst':True,'playintro':False,'rememberposition':True,'resumeposition':position},new)
+        self.parse_live_request({'settings':{'beginfirst':True,'playintro':False,'rememberposition':True},
+                                 'resumeposition':position},new)
         self.reg(self.spname,SP)
         if self.bits==64:
             self.reg('rcx',self.playlist);self.reg('rdx',new)
@@ -110,9 +169,9 @@ class Engine(native.Engine):
             self.run(0x518d3,0x518d8,'UI apply')
         assert len(self.dispatches)==1
         self.dispatches.clear()
-        return self.select(commit=commit,force=True)
+        return self.select(commit=commit,force=True,effective_preset=effective_preset)
 
-    def select(self,commit=True,force=False):
+    def select(self,commit=True,force=False,effective_preset=None):
         self.reg(self.spname,SP)
         if self.bits==64:
             self.reg('rbp',SP+0xc8);self.reg('r14',NODE);self.reg('r13',0)
@@ -130,7 +189,8 @@ class Engine(native.Engine):
         path=self.get_string(result);preset=self.get_string(result+self.preset_offset)
         self.wp(NODE+(0x30 if self.bits==64 else 0x20),native.RENDERER)
         self.string(native.RENDERER+(0xe0 if self.bits==64 else 0x94),path)
-        self.string(native.RENDERER+(0x120 if self.bits==64 else 0xc4),preset)
+        self.string(native.RENDERER+(0x120 if self.bits==64 else 0xc4),
+                    preset if effective_preset is None else effective_preset)
         if commit:
             self.reg(self.spname,SP)
             if self.bits==64:
@@ -267,7 +327,9 @@ def main():
         for request in requests:
             core.clear();e=Engine(core,bits)
             assert [e.select() for _ in range(7)]==[1,2,3,4,5,6,7]
-            target=request['settings']['resumeposition']
+            target=request['resumeposition']
+            assert e.copy_request_for_config(request)=={k:v for k,v in request.items() if k!='resumeposition'}
+            assert request['resumeposition']==target
             assert e.manual_click(target)==target
             assert core.records()[0]['index']==target-1
             assert e.select()==target%10+1
@@ -303,13 +365,34 @@ def main():
         assert e.checkpoint==6
         assert e.get_string(native.RENDERER+(0x120 if bits==64 else 0xc4))=='PRESET_5'
         assert core.records()[0]['index']==5;e.close();cases+=1
+        # Both clicks and normal advances may resolve an unspecified preset.
+        core.clear();e=Engine(core,bits)
+        assert e.select()==1
+        assert e.manual_click(2,effective_preset='Effective')==2
+        assert core.records()[0]['index']==1
+        assert e.select(effective_preset='Effective')==3
+        assert core.records()[0]['index']==2
+        e.close();core.restart();e=Engine(core,bits)
+        assert [e.select(),e.select()]==[1,3]
+        e.close();cases+=1
         # Numeric JSON requests are strictly bounded and reject other types.
         for bad in [None,True,False,-1,0,32769,1<<40,1.5,'2',{},[]]:
             e=Engine(core,bits)
-            flags=e.parse_settings({'beginfirst':True,'rememberposition':True,'resumeposition':bad})
+            flags=e.parse_live_request({'settings':{'beginfirst':True,'rememberposition':True},'resumeposition':bad})
             assert not flags&0xffff0100,(bits,bad,hex(flags));e.close()
         e=Engine(core,bits)
-        assert e.parse_settings({'beginfirst':True,'rememberposition':True,'resumeposition':32768})>>16==32768
+        assert e.parse_live_request({'settings':{'beginfirst':True,'rememberposition':True},'resumeposition':32768})>>16==32768
+        e.close();cases+=1
+        # A legacy config can replay an old command on every restart. Its
+        # settings key must never select a row or skip the protected prelude.
+        core.clear();e=Engine(core,bits)
+        assert e.select()==1
+        assert e.manual_click(4)==4 and e.select()==5
+        e.close();core.restart();e=Engine(core,bits)
+        legacy={'settings':{'beginfirst':True,'rememberposition':True,'resumeposition':7}}
+        assert e.parse_live_request(legacy)==0x28
+        assert [e.select(),e.select()]==[1,5]
+        assert core.records()[0]['index']==4
         e.close();cases+=1
         # Manual selection on one of the three actual monitor/list identities
         # leaves both other stored positions intact across profile recreation.

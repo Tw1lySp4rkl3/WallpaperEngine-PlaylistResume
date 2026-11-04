@@ -6,57 +6,57 @@
       "language_id": 1031,
       "dpi": 96,
       "passed": true,
-      "seconds": 0.035
+      "seconds": 0.047
     },
     {
       "case": "display-language default, standard path and disabled buttons",
       "language_id": 1033,
       "dpi": 144,
       "passed": true,
-      "seconds": 0.067
+      "seconds": 0.055
     },
     {
       "case": "display-language default, standard path and disabled buttons",
       "language_id": 2055,
       "dpi": 96,
       "passed": true,
-      "seconds": 0.067
+      "seconds": 0.057
     },
     {
       "case": "display-language default, standard path and disabled buttons",
       "language_id": 1036,
       "dpi": 96,
       "passed": true,
-      "seconds": 0.071
+      "seconds": 0.075
     },
     {
       "case": "live DE / EN / DE switch; controls, status, folder picker, dialogs; no file rereads",
       "passed": true,
-      "seconds": 0.102
+      "seconds": 0.108
     },
     {
       "case": "Unicode Steam library and refusal of unknown binaries",
       "passed": true,
-      "seconds": 0.05
+      "seconds": 0.074
     },
     {
       "case": "GetMessage error exits safely",
       "passed": true
     },
     {
-      "case": "Installiert \u2013 Vorabversion R04; real pinned runtime bytes, live translated status and preserved directory/button state",
+      "case": "Unvollst\u00e4ndige Installation \u2013 Reparatur m\u00f6glich; real pinned runtime bytes, live translated status and preserved directory/button state",
       "passed": true,
-      "seconds": 52.034
+      "seconds": 83.916
     },
     {
-      "case": "Installiert \u2013 v1.0; real pinned runtime bytes, live translated status and preserved directory/button state",
+      "case": "Installiert \u2013 v1.0.1; real pinned runtime bytes, live translated status and preserved directory/button state",
       "passed": true,
-      "seconds": 34.441
+      "seconds": 39.681
     },
     {
       "case": "actual worker access-error path, language lock, live retranslation of retained log and Windows error code, heap cleanup",
       "passed": true,
-      "seconds": 17.698
+      "seconds": 20.554
     }
   ],
   "scope": "Actual compiled x86 Windows GUI and event handlers with substituted Win32 APIs. DE/EN selection, OS-language default, status, dialogs, folder-picker text, worker access error, retained log retranslation, control locks, Unicode paths, DPI geometry, stdcall and heap cleanup. No real Windows rendering or mouse interaction."
