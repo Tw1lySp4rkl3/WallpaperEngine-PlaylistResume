@@ -1,4 +1,4 @@
-name: PlaylistResume Windows test DLLs
+name: PlaylistResume Windows test installer
 on:
   push:
     branches: [test/playlist-checkpoint-windows]
@@ -12,23 +12,21 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
-      - name: Build and validate both Windows DLLs
+      - name: Build the test installer from the checked-in recipes
         shell: bash
         run: |
           python3 -m venv "$RUNNER_TEMP/playlist-env"
           env_python="$RUNNER_TEMP/playlist-env/bin/python"
-          "$env_python" -m pip install --disable-pip-version-check -r Sources/requirements-analysis.txt ziglang==0.17.0
+          "$env_python" -m pip install --disable-pip-version-check pefile==2024.8.26 ziglang==0.17.0
           zig_dir=$("$env_python" -c 'from importlib.util import find_spec; from pathlib import Path; print(Path(find_spec("ziglang").origin).parent)')
           export PIRS_ZIG="$zig_dir/zig"
-          export WE_BUILD_OUTPUT="$RUNNER_TEMP/playlist-resume-test"
-          PYTHONPATH=Sources/tools "$env_python" -c 'from build_r04 import build_dlls; build_dlls()'
-          cd "$WE_BUILD_OUTPUT"
-          sha256sum PlaylistResume32.dll PlaylistResume64.dll > SHA256SUMS
+          export WE_INSTALLER_BUILD="$RUNNER_TEMP/playlist-resume-test"
+          "$env_python" Sources/tools/build_installer.py
+          sha256sum PlaylistResumeSetup.exe > "$WE_INSTALLER_BUILD/SHA256SUMS"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: PlaylistResume-Windows-Test
+          name: PlaylistResume-1.0.1-test
           path: |
-            ${{ runner.temp }}/playlist-resume-test/PlaylistResume32.dll
-            ${{ runner.temp }}/playlist-resume-test/PlaylistResume64.dll
+            PlaylistResumeSetup.exe
             ${{ runner.temp }}/playlist-resume-test/SHA256SUMS
           if-no-files-found: error

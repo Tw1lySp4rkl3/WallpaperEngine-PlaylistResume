@@ -34,6 +34,7 @@ lib.pr_vdf_paths.argtypes=[c.c_void_p,c.c_size_t,c.c_void_p,c.c_uint]
 
 CATALOG=load_catalog();CURRENT=CATALOG['current']['files']
 LEGACY={r['version']:r['files'] for r in CATALOG['legacy']}
+RECEIPTS={r['version']:r['receipt_bytes'] for r in CATALOG['legacy']}
 ORIGINALS={m['filename']:(INPUT/Path(m['filename']).name).read_bytes() for m in CURRENT[:3]}
 def apply(data,m):
     if m['kind']=='new':out=bytes.fromhex(m['contents_hex'])
@@ -59,6 +60,7 @@ class Disk:
         if version!='original':
             for m in (CURRENT if version=='current' else LEGACY[version]):
                 self.files[m['filename']]=apply(self.files.get(m['filename']),m)
+            if RECEIPTS.get(version):self.files['bin/playlist-resume-install.json']=RECEIPTS[version]
         def read(ctx,path,out):
             name=path.decode();out.contents.data=None;out.contents.size=0;out.contents.exists=0
             if name==self.fail_read:return 0
@@ -111,12 +113,12 @@ class InstallerTests(unittest.TestCase):
             data=bytes(i%251 for i in range(n));out=c.create_string_buffer(32);lib.pr_hash(data,n,out)
             self.assertEqual(out.raw,hashlib.sha256(data).digest())
     def test_version_detection(self):
-        for version,expected in [('original',0),('R01',5),('R02',4),('R03',3),('R04',2)]:
+        for version,expected in [('original',0),('R01',5),('R02',4),('R03',3),('R04',2),('1.0',7)]:
             with self.subTest(version=version):
                 d=Disk(version);before=dict(d.files);s=d.status();self.assertEqual(s.version,expected,s.label)
                 self.assertTrue(s.supported);self.assertEqual(d.files,before);self.assertFalse(d.events)
     def test_all_versions_install_idempotent_restore(self):
-        for version in ['original','R01','R02','R03','R04']:
+        for version in ['original','R01','R02','R03','R04','1.0']:
             with self.subTest(version=version):
                 d=Disk(version);d.files['config.json']=b'preserve configuration';d.files['bin/playliststate.bin']=b'preserve native state'
                 self.assertEqual(d.run(),0,d.logs);d.check_installed(self)
@@ -124,17 +126,25 @@ class InstallerTests(unittest.TestCase):
                 self.assertEqual(d.run(2),0);d.check_original(self)
                 self.assertEqual(d.files['config.json'],b'preserve configuration')
                 self.assertEqual(d.files['bin/playliststate.bin'],b'preserve native state');d.assert_no_temps(self)
-    def test_r04_upgrade_does_not_rewrite_runtime(self):
-        d=Disk('R04');self.assertEqual(d.run(),0);d.check_installed(self)
-        self.assertEqual([p for op,p in d.events if op=='replace'],['bin/playlist-resume-install.json'])
-    def test_archived_v1_receipt_upgrade_and_restore(self):
-        # Simulate a later release with v1.0 archived in the SAME legacy.json.
+    def test_upgrade_with_previous_test_dlls_preserves_user_data(self):
+        d=Disk('1.0')
+        for m in LEGACY['checkpoint-test']:
+            d.files[m['filename']]=apply(None,m)
+        d.files['config.json']=b'config with old click request'
+        d.files['bin/playlist-resume.bin']=b'saved position'
+        self.assertTrue(d.status().supported)
+        self.assertEqual(d.run(),0,d.logs);d.check_installed(self)
+        self.assertEqual(d.files['config.json'],b'config with old click request')
+        self.assertEqual(d.files['bin/playlist-resume.bin'],b'saved position')
+        self.assertEqual(d.run(2),0,d.logs);d.check_original(self)
+    def test_archived_current_receipt_upgrade_and_restore(self):
+        # Simulate a later release with the current version archived in the SAME legacy.json.
         # Compile the real core and freshly generated payload; no version/hash
         # detection or transaction code is substituted.
         with tempfile.TemporaryDirectory(prefix='playlist-resume-legacy-') as temp:
             folder=Path(temp);current=json.loads((ROOT/'patches/patches.json').read_text())
             legacy=json.loads((ROOT/'patches/legacy.json').read_text())
-            legacy['releases'].append({'version':'1.0','compatibility_id':7,'preview':False,
+            legacy['releases'].append({'version':current['version'],'compatibility_id':9,'preview':False,
                 'files':json.loads(json.dumps(current['files'])),'receipt':CATALOG['receipt']})
             current['version']='1.1'
             for m in current['files']:m['revision']='1.1'
@@ -153,7 +163,7 @@ class InstallerTests(unittest.TestCase):
             disk=Disk('current',engine=future)
             disk.files['bin/playlist-resume-install.json']=CATALOG['receipt_bytes']
             disk.files['bin/playlist-resume.bin']=b'preserve positions'
-            status=disk.status();self.assertEqual(status.version,7);self.assertEqual(status.label.decode(),'Installiert – v1.0')
+            status=disk.status();self.assertEqual(status.version,9);self.assertEqual(status.label.decode(),'Installiert – v'+CATALOG['current']['version'])
             before=disk.runtime();self.assertEqual(disk.run(),0,disk.logs)
             self.assertEqual(json.loads(disk.files['bin/playlist-resume-install.json'])['version'],'1.1')
             self.assertEqual(disk.status().version,1)
@@ -161,7 +171,7 @@ class InstallerTests(unittest.TestCase):
             self.assertEqual(disk.files['bin/playlist-resume.bin'],before['bin/playlist-resume.bin'])
             self.assertEqual(disk.run(2),0);disk.check_original(self)
             self.assertEqual(disk.files['bin/playlist-resume.bin'],b'preserve positions')
-            # Restoring an archived v1.0 directly must also work, without an update.
+            # Restoring the archived current version directly must also work, without an update.
             disk=Disk('current',engine=future);disk.files['bin/playlist-resume-install.json']=CATALOG['receipt_bytes']
             self.assertEqual(disk.run(2),0);disk.check_original(self)
             self.assertEqual(future.pr_test_allocations(),0)

@@ -18,7 +18,7 @@ function browser(settings={},options={}) {
   const F={callDeferred:(...args)=>{calls.push(structuredClone(args));return Promise.resolve();}};
   const context=vm.createContext({V,angular,F,O:{when:()=>Promise.resolve()},N:[],xt:0,fe:false,m:()=>{},
     l:e=>ordinary.push(e),Xe:()=>Promise.resolve(),console:{error:e=>errors.push(e)}});
-  const serializer=script.slice(script.indexOf('function qe(e){'),script.indexOf('function Ne(e){'));
+  const serializer=script.slice(script.indexOf('function resumePlaylistSettings(e){'),script.indexOf('function Ne(e){'));
   const callbacks=script.slice(script.indexOf('function applyResumePlaylistEntry(e,c){'),script.indexOf(';var St=[]',script.indexOf('function applyResumePlaylistEntry(e,c){'))+1);
   assert.ok(callbacks.endsWith('};'));
   vm.runInContext(serializer+callbacks,context);
@@ -39,7 +39,8 @@ test('real click callbacks emit one-shot positions without changing saved settin
     assert.equal(b.calls.length,1);assert.equal(b.ordinary.length,0);
     const [object,method,payload,location]=b.calls[0];
     assert.equal(object,'browseWallpaperObject');assert.equal(method,'selectPlaylist');
-    assert.equal(location,b.monitor.location);assert.equal(payload.settings.resumeposition,position);
+    assert.equal(location,b.monitor.location);assert.equal(payload.resumeposition,position);
+    assert.equal(Object.hasOwn(payload.settings,'resumeposition'),false);
     assert.equal(payload.items[position-1],b.wallpapers[position-1].file);
     assert.equal(b.V.currentSelection,b.wallpapers[position-1]);
     assert.equal(b.V.wallpaperConfig.selectedwallpapers[location].file,b.wallpapers[position-1].file);
@@ -51,15 +52,23 @@ test('real click callbacks emit one-shot positions without changing saved settin
   fs.writeFileSync(path.join(out,'ui-selection-requests.json'),JSON.stringify(requests,null,2)+'\n');
 });
 
+test('loaded legacy settings drop the old saved selection without changing the input',()=>{
+  const b=browser();
+  b.playlist.settings.resumeposition=70;
+  const saved=vm.runInContext('qe(V.selectedMonitor.playlist)',b.context);
+  assert.equal(Object.hasOwn(saved.settings,'resumeposition'),false);
+  assert.equal(b.playlist.settings.resumeposition,70);
+});
+
 test('clicking the already visible startup WP1 still emits the reset to position 1',async()=>{
   const b=browser({}, {current:0});b.V.callbackPlaylistEntrySelected(b.playlist.items[0],0);await b.settle();
-  assert.equal(b.calls[0][2].settings.resumeposition,1);
+  assert.equal(b.calls[0][2].resumeposition,1);
 });
 
 test('duplicate wallpapers retain the clicked row and its preset',async()=>{
   const b=browser();b.playlist.items[5]={wallpaper:b.wallpapers[1],preset:'Second preset'};
   b.V.callbackPlaylistEntrySelected(b.playlist.items[5],5);await b.settle();
-  assert.equal(b.calls[0][2].settings.resumeposition,6);
+  assert.equal(b.calls[0][2].resumeposition,6);
   assert.deepEqual(b.calls[0][2].items[5],{file:'WP_00002',preset:'Second preset'});
 });
 

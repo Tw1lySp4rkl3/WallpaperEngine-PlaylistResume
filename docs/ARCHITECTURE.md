@@ -60,7 +60,10 @@ after the actual renderer is known.
 The startup wallpaper is protected from overwriting the regular checkpoint.
 Following the startup prelude, selection replays the saved wallpaper and continues
 the sorted playlist. A manual click in the lower playlist strip carries a one-shot
-row index in the selection message; it is not written into saved playlist settings.
+row index at the top level of the selection message. The live selectPlaylist
+path reads it from the incoming message and removes it from the copy used for
+configuration. Older settings.resumeposition values are ignored by the native
+parser and discarded by the UI when loading or serializing playlist settings.
 Compatibility prompts recheck that the monitor, list and clicked row are still
 current before applying the request. The renderer must match the selected file
 and any explicitly named preset before the checkpoint is committed. If the

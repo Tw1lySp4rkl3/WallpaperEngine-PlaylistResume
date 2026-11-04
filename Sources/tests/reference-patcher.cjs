@@ -15,7 +15,7 @@ function loadManifests(directory=path.join(__dirname,'../patches')) {
   const catalog=JSON.parse(fs.readFileSync(path.join(directory,'patches.json'),'utf8'));
   return FILES.map(filename=>{
     const m=catalog.files.find(m=>m.filename===filename);
-    if(!m||m.version!=='2.8.42'||m.revision!=='1.0')throw new Error('Ungueltiges Patchpaket: '+filename);
+    if(!m||m.version!=='2.8.42'||m.revision!==catalog.version)throw new Error('Ungueltiges Patchpaket: '+filename);
     return m;
   });
 }

@@ -11,6 +11,7 @@ from unicorn.x86_const import UC_X86_REG_ESP,UC_X86_REG_EIP,UC_X86_REG_EAX
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'))
 from patch_catalog import load_catalog
+VERSION=load_catalog()['current']['version']
 OUT=Path(os.environ.get('WE_INSTALLER_BUILD',ROOT/'build'))
 INPUT=Path(os.environ.get('WE_ORIGINALS',ROOT/'upload'))
 COUNTS={
@@ -201,7 +202,7 @@ def main():
         g=Gui(steam=None,dpi=dpi,language_id=language_id);seconds=g.run();g.validate_layout();assert g.exit==0
         assert not g.by_id(103)['enabled'] and not g.by_id(104)['enabled']
         assert g.by_id(100)['text']=='C:\\Program Files (x86)\\Steam\\steamapps\\common\\wallpaper_engine'
-        assert any(x['text']=='PlaylistResume v1.0' for x in g.controls.values())
+        assert any(x['text']==f'PlaylistResume v{VERSION}' for x in g.controls.values())
         assert g.by_id(103)['text']==install_label
         assert g.by_id(106)['items']==['Deutsch','English']
         assert g.by_id(106)['selection']==(0 if language_id&0x3ff==7 else 1)
@@ -256,14 +257,14 @@ def main():
         assert hashlib.sha256(data).hexdigest()==m['patched_sha256']
         files[root+'\\'+m['filename'].replace('/','\\')]=data
     fingerprint=hashlib.sha256(''.join(m['patched_sha256'] for m in manifests).encode()).hexdigest()
-    for receipt,label in [(False,'Installiert – Vorabversion R04'),(True,'Installiert – v1.0')]:
-        if receipt:files[root+'\\bin\\playlist-resume-install.json']=json.dumps({'project':'PlaylistResume','version':'1.0','engine':'2.8.42','payload':fingerprint},separators=(',',':')).encode()+b'\r\n'
+    for receipt,label in [(False,'Unvollständige Installation – Reparatur möglich'),(True,f'Installiert – v{VERSION}')]:
+        if receipt:files[root+'\\bin\\playlist-resume-install.json']=json.dumps({'project':'PlaylistResume','version':VERSION,'engine':'2.8.42','payload':fingerprint},separators=(',',':')).encode()+b'\r\n'
         events=[{'kind':'snapshot','name':'de'},{'kind':'language','index':1},{'kind':'snapshot','name':'en'},
                 {'kind':'language','index':0},{'kind':'snapshot','name':'de_again'}]
         g=Gui(files,events=events);seconds=g.run();g.validate_layout();assert g.exit==0
         assert g.by_id(103)['enabled'] and g.by_id(104)['enabled']
         assert any(x['text']==label for x in g.controls.values())
-        english_label='Installed – v1.0' if receipt else 'Installed – preview R04'
+        english_label=f'Installed – v{VERSION}' if receipt else 'Incomplete installation – repair available'
         assert any(x['text']==english_label for x in g.snapshots['en']['controls'].values())
         assert saved(g,'de',100)['text']==saved(g,'en',100)['text']==root
         assert all(saved(g,name,103)['enabled'] and saved(g,name,104)['enabled'] for name in ['de','en','de_again'])

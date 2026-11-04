@@ -83,51 +83,6 @@ class BuilderR04(BaseBuilder):
                           'extend_imports_with_local_checkpoint_helper')
 
     def code(self,asm,label,*args,**kwargs):
-        if label=='read_rememberposition_setting':
-            if self.bits==64:
-                old='and dword ptr [r14+0x3c], 0xffffffef'
-                extra='''
-                    mov rcx, rbx
-                    lea rdx, [rip+0x3333]
-                    lea r8, [rip+0x4444]
-                    call 0x140086de0
-                    movzx ecx, byte ptr [rax+8]
-                    sub ecx, 1
-                    cmp ecx, 1
-                    ja done
-                    cmp qword ptr [rax], 1
-                    jb done
-                    cmp qword ptr [rax], 32768
-                    ja done
-                    mov eax, dword ptr [rax]
-                    shl eax, 16
-                    or eax, 0x100
-                    or dword ptr [r14+0x3c], eax
-                '''
-            else:
-                old='and dword ptr [edi+0x24], 0xffffffef'
-                extra=f'''
-                    push {self.manual_key+14}
-                    push {self.manual_key}
-                    mov ecx, esi
-                    call 0x4681a0
-                    movzx ecx, byte ptr [eax+8]
-                    sub ecx, 1
-                    cmp ecx, 1
-                    ja done
-                    cmp dword ptr [eax+4], 0
-                    jne done
-                    mov eax, dword ptr [eax]
-                    cmp eax, 1
-                    jb done
-                    cmp eax, 32768
-                    ja done
-                    shl eax, 16
-                    or eax, 0x100
-                    or dword ptr [edi+0x24], eax
-                '''
-            assert asm.count(old)==1
-            asm=asm.replace(old,old+'\n'+extra)
         if label=='preserve_same_playlist_on_ui_apply':
             # This callsite is only used for an existing native monitor node.
             # Native selectPlaylist normally applies settings without selecting.
@@ -184,7 +139,118 @@ class BuilderR04(BaseBuilder):
         self.body[off:off+len(code)]=code
         return rva
 
+    def add_manual_request_hooks(self):
+        # selectPlaylist first copies its JSON payload to selectedwallpapers,
+        # then parses the original payload for the live selector. Keep the
+        # command only in the latter. Old settings.resumeposition is ignored.
+        if self.bits==64:
+            copy=self.code('''
+                sub rsp, 0x38
+                call 0x140085520
+                cmp byte ptr [rax+8], 7
+                jne done
+                mov qword ptr [rsp+0x20], rax
+                lea rdx, [rip+0x3333]
+                mov qword ptr [rsp+0x28], rdx
+                mov qword ptr [rsp+0x30], 56
+                mov rcx, rax
+                lea rdx, [rsp+0x28]
+                call 0x1400878f0
+                mov rax, qword ptr [rsp+0x20]
+              done:
+                add rsp, 0x38
+                ret
+            ''','omit_click_request_from_saved_playlist',
+                own_unwind=bytes.fromhex('01 04 01 00 04 62 00 00'))
+            parse=self.code('''
+                sub rsp, 0x38
+                mov qword ptr [rsp+0x20], rdx
+                mov qword ptr [rsp+0x28], r8
+                call 0x140075a90
+                mov qword ptr [rsp+0x30], rax
+                mov rcx, qword ptr [rsp+0x20]
+                cmp byte ptr [rcx+8], 7
+                jne done
+                lea rdx, [rip+0x3333]
+                lea r8, [rip+0x4444]
+                call 0x140087490
+                test rax, rax
+                jz done
+                movzx ecx, byte ptr [rax+8]
+                sub ecx, 1
+                cmp ecx, 1
+                ja done
+                cmp qword ptr [rax], 1
+                jb done
+                cmp qword ptr [rax], 32768
+                ja done
+                mov eax, dword ptr [rax]
+                shl eax, 16
+                or eax, 0x100
+                mov rcx, qword ptr [rsp+0x28]
+                or dword ptr [rcx+0x3c], eax
+              done:
+                mov rax, qword ptr [rsp+0x30]
+                add rsp, 0x38
+                ret
+            ''','read_click_request_only_on_select_playlist',
+                own_unwind=bytes.fromhex('01 04 01 00 04 62 00 00'))
+            self.call_hook(0x66c1f,copy,0x85520,'copy_playlist_without_click_request')
+            self.call_hook(0x66cb6,parse,0x75a90,'parse_live_playlist_with_click_request')
+        else:
+            copy=self.code(f'''
+                push dword ptr [esp+4]
+                call 0x467150
+                cmp byte ptr [eax+8], 7
+                jne done
+                push eax
+                mov ecx, dword ptr [eax]
+                push 56
+                push {self.manual_key}
+                push esp
+                call 0x469370
+                add esp, 8
+                pop eax
+              done:
+                ret 4
+            ''','omit_click_request_from_saved_playlist')
+            parse=self.code(f'''
+                push dword ptr [esp+8]
+                push dword ptr [esp+8]
+                call 0x45c6c0
+                push eax
+                mov ecx, dword ptr [esp+8]
+                cmp byte ptr [ecx+8], 7
+                jne done
+                push {self.manual_key+14}
+                push {self.manual_key}
+                call 0x4683f0
+                test eax, eax
+                jz done
+                movzx ecx, byte ptr [eax+8]
+                sub ecx, 1
+                cmp ecx, 1
+                ja done
+                cmp dword ptr [eax+4], 0
+                jne done
+                mov eax, dword ptr [eax]
+                cmp eax, 1
+                jb done
+                cmp eax, 32768
+                ja done
+                shl eax, 16
+                or eax, 0x100
+                mov ecx, dword ptr [esp+12]
+                or dword ptr [ecx+0x24], eax
+              done:
+                pop eax
+                ret 8
+            ''','read_click_request_only_on_select_playlist')
+            self.call_hook(0x5182c,copy,0x67150,'copy_playlist_without_click_request')
+            self.call_hook(0x5188c,parse,0x5c6c0,'parse_live_playlist_with_click_request')
+
     def finalize(self):
+        self.add_manual_request_hooks()
         if self.bits==64:
             self.code('''
                 mov rcx, r14
@@ -276,10 +342,15 @@ def build_ui():
         assert s.count(before)==1,before[:100]
         s=s.replace(before,after)
         manifest['replacements'].append({'before':before,'after':after})
+    # Strip obsolete settings keys when reading and writing playlists.
+    for prefix in ('return{','var t={'):
+        replace(prefix+'settings:angular.copy(e.settings),name:',
+                prefix+'settings:resumePlaylistSettings(e.settings),name:')
+    replace('function qe(e){','function resumePlaylistSettings(e){var s=angular.copy(e);if(s)delete s.resumeposition;return s}function qe(e){')
     helper='''function applyResumePlaylistEntry(e,c){var m=c.monitor,p=m&&m.playlist,s=p&&p.settings;
 if(V.selectedMonitor!==m||m.location!==c.location||p!==c.playlist||p.items[c.index]!==c.entry||c.entry.wallpaper!==e||e.status!=="installed"||!s||s.rememberposition!==true||s.beginfirst!==true||s.mode!=="timer"||s.order!=="sorted")return;
 var payload=qe(p),selected=V.wallpaperConfig.selectedwallpapers[c.location]||{};
-payload.settings.resumeposition=c.index+1;selected.file=e.file;V.wallpaperConfig.selectedwallpapers[c.location]=selected;
+payload.resumeposition=c.index+1;selected.file=e.file;V.wallpaperConfig.selectedwallpapers[c.location]=selected;
 V.currentSelection=e;m.wallpaper=e;
 return F.callDeferred("browseWallpaperObject","selectPlaylist",payload,c.location)}
 V.callbackPlaylistEntrySelected=function(entry,index){var m=V.selectedMonitor,p=m&&m.playlist,s=p&&p.settings;

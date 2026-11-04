@@ -247,7 +247,7 @@ int pr_run(const PrFS *fs,int action){
     }
     PrBuffer receipt={0};if(action==1&&!clone(&receipt,pr_receipt,pr_receipt_size))goto finish;
     if(!add(p,RECEIPT,inventory.files[7],receipt,0,4))goto finish;
-    if(!p->count){message(fs,action==1?"PlaylistResume v1.0 ist bereits vollständig installiert.":"Die Originaldateien sind bereits vorhanden.",0);result=0;goto finish;}
+    if(!p->count){message(fs,action==1?"PlaylistResume v1.0.1-test ist bereits vollständig installiert.":"Die Originaldateien sind bereits vorhanden.",0);result=0;goto finish;}
     if(!fs->stopped(fs->context)){message(fs,"Wallpaper Engine läuft noch. Bitte über das Taskleistensymbol vollständig beenden und erneut versuchen.",0);goto finish;}
     if(!backups(fs,originals)){message(fs,"Sicherung fehlgeschlagen. Programmdateien wurden nicht geändert.",0);goto finish;}
     for(unsigned i=1;i<p->count;i++){
@@ -267,7 +267,7 @@ int pr_run(const PrFS *fs,int action){
         if(!expected(fs,j->path,&j->after)){message(fs,"Prüfung nach dem Ersetzen fehlgeschlagen: ",j->path);goto rollback;}
         message(fs,j->after.exists?"Übernommen: ":"Entfernt: ",j->path);
     }
-    message(fs,action==1?"PlaylistResume v1.0 wurde installiert.":"Originaldateien wurden wiederhergestellt. Positionen und Einstellungen bleiben erhalten.",0);
+    message(fs,action==1?"PlaylistResume v1.0.1-test wurde installiert.":"Originaldateien wurden wiederhergestellt. Positionen und Einstellungen bleiben erhalten.",0);
     message(fs,"Sicherung: ",BACKUP);result=0;goto finish;
   rollback:
     result=1;
